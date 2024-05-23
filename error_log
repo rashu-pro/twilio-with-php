@@ -1,0 +1,14 @@
+[23-May-2024 20:34:49 UTC] Received message from : 
+[23-May-2024 20:36:40 UTC] Received message from whatsapp:+8801643177674: test message
+[23-May-2024 20:40:07 UTC] PHP Fatal error:  Uncaught Error: Class 'Dotenv\Dotenv' not found in /home/proshik1/public_html/twilio/incoming_message.php:4
+Stack trace:
+#0 {main}
+  thrown in /home/proshik1/public_html/twilio/incoming_message.php on line 4
+[23-May-2024 20:40:46 UTC] PHP Fatal error:  Uncaught Error: Class 'Dotenv\Dotenv' not found in /home/proshik1/public_html/twilio/incoming_message.php:4
+Stack trace:
+#0 {main}
+  thrown in /home/proshik1/public_html/twilio/incoming_message.php on line 4
+[23-May-2024 20:52:10 UTC] PHP Fatal error:  Uncaught Error: Class 'Dotenv\Dotenv' not found in /home/proshik1/public_html/twilio/incoming_message.php:5
+Stack trace:
+#0 {main}
+  thrown in /home/proshik1/public_html/twilio/incoming_message.php on line 5
