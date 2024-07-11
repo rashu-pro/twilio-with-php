@@ -55,7 +55,7 @@ $threads = fetch_threads_by_id($conn, $_GET['contact_id']);
                         if($is_whatsapp_number){
                             echo str_replace('whatsapp:', '', $contact_details_by_id[0]['contact_number']);
                         }else{
-                            $contact_details_by_id[0]['contact_number'];
+                            echo $contact_details_by_id[0]['contact_number'];
                         }
                         ?>
 
