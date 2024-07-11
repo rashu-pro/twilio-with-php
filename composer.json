@@ -1,5 +1,7 @@
 {
   "require": {
+    "ext-pdo": "*",
+    "ext-mysqli": "*",
     "twilio/sdk": "^5.0",
     "vlucas/phpdotenv": "^5.6"
   }
