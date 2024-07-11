@@ -15,8 +15,8 @@ $to_alex_whatsapp = "whatsapp:+19499293776";
 
 // Array of recipient WhatsApp numbers
 $recipients = [
-    'whatsapp:+19496772261',
-    'whatsapp:+12488055467',
+//    'whatsapp:+19496772261',
+//    'whatsapp:+12488055467',
     'whatsapp:+8801643177674'
 ];
 $message_body = "Welcome to We Do Cabo Fun!";

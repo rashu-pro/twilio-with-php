@@ -1,0 +1,29 @@
+.chat-wrapper-image{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.chat-wrapper{
+    position: relative;
+}
+.chat-wrapper-content{
+    padding: 30px;
+    min-height: 70vh;
+}
+
+.chat-contact{
+    background-color: #fff;
+    border-radius: 8px;
+}
+
+.chat-self{
+    background-color: #d9fdd3;
+    border-radius: 8px;
+}
+.send-form-holder{
+    background-color: #f0f2f5;
+    padding: 20px 30px;
+}

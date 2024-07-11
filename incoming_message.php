@@ -13,13 +13,12 @@ $body = $_POST['Body'];
 
 // Log the message for debugging purposes
 error_log("Received message from $from: $body");
-make_contact_number_unique($conn);
-if($from){
-    insert_contact_number($conn, $from);
-}
-?>
 
-<?php
+if($from){
+    $inserted_id = insert_contact_number($conn, $from);
+    $contacts = fetch_contacts_by_contact_number($conn, $from = $_POST['From']);
+    store_contact_message($conn, $contacts['id'], $_POST['Body'], 1, 0);
+}
 
 // Respond to Twilio with a simple TwiML message (optional)
 $response = new MessagingResponse();
