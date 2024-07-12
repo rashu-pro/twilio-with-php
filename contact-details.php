@@ -32,19 +32,27 @@ $threads = fetch_threads_by_id($conn, $_GET['contact_id']);
             <div class="col-md-8">
 
                 <div>
-                    <?php if($is_whatsapp_number): ?>
-                        <p class="font-monospace text-success text-uppercase m-0">whatsapp</p>
-                    <?php endif; ?>
-                    <h4 class="card-title">
-                        <?php
-                        if($is_whatsapp_number){
-                            echo str_replace('whatsapp:', '', $contact_details_by_id['contact_number']);
-                        }else{
-                            echo $contact_details_by_id['contact_number'];
-                        }
-                        ?>
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <?php if($is_whatsapp_number): ?>
+                                <p class="font-monospace text-success text-uppercase m-0">whatsapp</p>
+                            <?php endif; ?>
+                            <h4 class="card-title">
+                                <?php
+                                if($is_whatsapp_number){
+                                    echo str_replace('whatsapp:', '', $contact_details_by_id['contact_number']);
+                                }else{
+                                    echo $contact_details_by_id['contact_number'];
+                                }
+                                ?>
 
-                    </h4>
+                            </h4>
+                        </div>
+                        <div class="text-end">
+                            <a href="contact-list.php" class="btn btn-secondary btn-sm">Back to List</a>
+                        </div>
+                    </div>
+
                 </div>
 
                 <div class="chat-wrapper mt-3" style='background-color: #efeae2'>
