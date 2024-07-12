@@ -86,50 +86,13 @@ function fetch_contacts($conn) {
 
 // Function to fetch contacts from the database
 function fetch_contacts_by_id($conn, $id) {
-    $contacts = array();
-
-    // Query to select all columns from contact_list table
-    $sql = "SELECT * FROM contact_list where id=$id";
-
-    // Execute query and fetch results
-    $result = $conn->query($sql);
-
-    if ($result->num_rows > 0) {
-        // Fetch each row as an associative array
-        while ($row = $result->fetch_assoc()) {
-            $contacts[] = $row;
-        }
-    }
-
-    return $contacts;
-}
-
-// Function to fetch threads by contact_id
-function fetch_threads_by_id($conn, $id) {
-    $contacts = array();
-
-    // Query to select all columns from contact_list table
-    $sql = "SELECT * FROM threads where contact_id=$id";
-
-    // Execute query and fetch results
-    $result = $conn->query($sql);
-
-    if ($result->num_rows > 0) {
-        // Fetch each row as an associative array
-        while ($row = $result->fetch_assoc()) {
-            $contacts[] = $row;
-        }
-    }
-
-    return $contacts;
-}
-
-function fetch_contacts_by_contact_number($conn, $contact_number) {
     // Prepare an SQL statement for execution
-    $stmt = $conn->prepare("SELECT * FROM contact_list WHERE contact_number = ?");
+    $stmt = $conn->prepare("SELECT * FROM contact_list WHERE id = ?");
 
     // Bind variables to the prepared statement as parameters
-    $stmt->bind_param("s", $contact_number);
+    $stmt->bind_param("i", $id);
+
+    $data = false;
 
     // Attempt to execute the prepared statement
     if ($stmt->execute()) {
@@ -138,20 +101,85 @@ function fetch_contacts_by_contact_number($conn, $contact_number) {
 
         // Fetch the result as an associative array
         if ($result->num_rows > 0) {
-            $contact = $result->fetch_assoc();
-            print_r($contact); // Output the contact for demonstration purposes
-            return $contact;
+            $data = $result->fetch_assoc();
         } else {
             echo "No contact found with the provided number.";
-            return null;
+            $data = null;
         }
     } else {
         echo "Error: " . $stmt->error;
-        return null;
     }
 
     // Close the statement
     $stmt->close();
+    return $data;
+}
+
+// Function to fetch threads by contact_id
+function fetch_threads_by_id($conn, $id) {
+    // Prepare an SQL statement for execution
+    $stmt = $conn->prepare("SELECT * FROM threads WHERE contact_id = ?");
+
+    // Bind variables to the prepared statement as parameters
+    $stmt->bind_param("i", $id);
+
+    $data = [];
+
+    // Attempt to execute the prepared statement
+    if ($stmt->execute()) {
+        // Get the result set from the executed statement
+        $result = $stmt->get_result();
+
+        // Fetch the result as an associative array
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+        } else {
+            echo "No contact found with the provided number.";
+            $data = null;
+        }
+    } else {
+        echo "Error: " . $stmt->error;
+    }
+
+    // Close the statement
+    $stmt->close();
+    return $data;
+}
+
+/**
+ * @param $conn
+ * @param $contact_number
+ * @return false|mixed|null
+ */
+function fetch_contacts_by_contact_number($conn, $contact_number) {
+    // Prepare an SQL statement for execution
+    $stmt = $conn->prepare("SELECT * FROM contact_list WHERE contact_number = ?");
+
+    // Bind variables to the prepared statement as parameters
+    $stmt->bind_param("s", $contact_number);
+
+    $data = false;
+    // Attempt to execute the prepared statement
+    if ($stmt->execute()) {
+        // Get the result set from the executed statement
+        $result = $stmt->get_result();
+
+        // Fetch the result as an associative array
+        if ($result->num_rows > 0) {
+            $data = $result->fetch_assoc();
+        } else {
+            echo "No contact found with the provided number.";
+            $data = null;
+        }
+    } else {
+        echo "Error: " . $stmt->error;
+    }
+
+    // Close the statement
+    $stmt->close();
+    return $data;
 }
 
 function send_message($client, $from, $to, $body) {

@@ -1,28 +1,13 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'].'/vendor/autoload.php';
-require_once 'resources/database_connection.php';
-require_once 'inc/functions.php';
-use Twilio\Rest\Client;
-
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-$dotenv->load();
-
-$sid = $_ENV['TWILIO_ACCOUNT_SID'];
-$token = $_ENV['TWILIO_AUTH_TOKEN'];
-$client = new Client($sid, $token);
+require_once $_SERVER['DOCUMENT_ROOT'].'/resources/database_connection.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/inc/functions.php';
 
 $contact_details_by_id = fetch_contacts_by_id($conn, $_GET['contact_id']);
 
-$from_number = $contact_details_by_id[0]['contact_number'];
 $is_whatsapp_number = false;
-if(strpos($contact_details_by_id[0]['contact_number'], ':')){
-    $from_number = "whatsapp:+18334630495";
+if(strpos($contact_details_by_id['contact_number'], ':')){
     $is_whatsapp_number = true;
-}
-
-if(isset($_POST['chat_response'])){
-    send_message($client, $from_number, $contact_details_by_id[0]['contact_number'], $_POST['chat_response_text']);
-    store_contact_message($conn, $contact_details_by_id[0]['id'], $_POST['chat_response_text'], 0, 1);
 }
 
 $threads = fetch_threads_by_id($conn, $_GET['contact_id']);
@@ -53,9 +38,9 @@ $threads = fetch_threads_by_id($conn, $_GET['contact_id']);
                     <h4 class="card-title">
                         <?php
                         if($is_whatsapp_number){
-                            echo str_replace('whatsapp:', '', $contact_details_by_id[0]['contact_number']);
+                            echo str_replace('whatsapp:', '', $contact_details_by_id['contact_number']);
                         }else{
-                            echo $contact_details_by_id[0]['contact_number'];
+                            echo $contact_details_by_id['contact_number'];
                         }
                         ?>
 
@@ -83,22 +68,21 @@ $threads = fetch_threads_by_id($conn, $_GET['contact_id']);
                                                 <p class="m-0" style="font-size: 0.7rem;color: #3e3838"><?php echo $thread['created_at'] ?></p>
                                                 <p class="m-0"><?php echo $thread['message_body'] ?></p>
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>
                         <?php endforeach; ?>
                         <?php endif; ?>
-
                     </div>
 
                     <div class="send-form-holder">
-                        <form action="#" method="post">
+                        <form action="inc/submit-actions.php" method="post">
                             <div class="input-group mb-0">
                                 <input type="text" name="chat_response_text" class="form-control" placeholder="Type your message..." style="border: 0; height: 50px">
 
                                 <div class="hidden-fields">
-                                    <input type="hidden" name="to_number" value="whatsapp:+8801643177674">
+                                    <input type="hidden" name="to_number" value="<?php echo $contact_details_by_id['contact_number'] ?>" />
+                                    <input type="hidden" name="id" value="<?php echo $contact_details_by_id['id'] ?>" />
                                 </div>
                                 <button class="btn btn-primary px-4" name="chat_response" type="submit" id="button-addon2">Send</button>
                             </div>
