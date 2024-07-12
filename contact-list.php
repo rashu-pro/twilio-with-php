@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once $_SERVER['DOCUMENT_ROOT'].'/vendor/autoload.php';
 require_once $_SERVER['DOCUMENT_ROOT'].'/resources/database_connection.php';
 require_once $_SERVER['DOCUMENT_ROOT'].'/inc/functions.php';
@@ -21,6 +22,44 @@ $contacts = fetch_contact_list_with_last_message($conn);
 <div class="my-5">
     <div class="container">
         <div class="contact-list-holder contact-list-holder-js">
+
+            <!-- show alert/warning messages -->
+            <?php
+            if(isset($_SESSION['error_message'])){
+                ?>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+                    <?php
+                    echo $_SESSION['error_message'];
+                    unset($_SESSION['error_message']);
+                    ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            <?php
+            }
+
+            if(isset($_SESSION['success_message'])){
+                ?>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
+                    <?php
+                    echo $_SESSION['success_message'];
+                    unset($_SESSION['success_message']);
+                    ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <?php
+            }
+            ?>
+
+            <div class="d-flex justify-content-between py-2 px-4 mb-4" style="background-color: #e9ecef">
+                <div>
+                    <h4 class="text-success"> Send Message Using Twilio</h4>
+                </div>
+                <div class="text-end">
+                    <a href="#" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#send_message_modal">Send Message To a New Contact</a>
+                </div>
+            </div>
             <?php if($contacts): ?>
                 <table class="table table-striped">
                     <thead>
@@ -71,6 +110,58 @@ $contacts = fetch_contact_list_with_last_message($conn);
             <?php else: ?>
                 <h2>No contacts found yet!</h2>
             <?php endif; ?>
+        </div>
+    </div>
+</div>
+
+<!-- Send Message Modal -->
+<div class="modal fade" id="send_message_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Send Message</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="inc/submit-actions.php" method="post">
+                <div class="modal-body">
+                    <div class="">
+                        <!-- From Number -->
+                        <div class="mb-3">
+                            <label for="from_number">From Number</label>
+                            <select class="form-select" id="from_number" name="from_number">
+                                <option value="+18334630495">+18334630495</option>
+                            </select>
+                        </div>
+
+                        <!-- Texting Mode -->
+                        <div class="mb-3">
+                            <label for="texting_mode">Texting Mode</label>
+                            <select class="form-select" id="texting_mode" name="texting_mode">
+                                <option value="whatsapp">whatsapp</option>
+                            </select>
+                        </div>
+
+                        <!-- To Number -->
+                        <div class="mb-3">
+                            <label for="to_number">To Number</label>
+                            <span> (Insert the number with country code) </span>
+                            <input type="text" class="form-control" id="to_number" name="to_number" required>
+                        </div>
+
+                        <!-- Text -->
+                        <div class="mb-3">
+                            <label for="text_area">Message</label>
+                            <textarea rows="3" class="form-control" id="text_area" name="text_area" required></textarea>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button class="btn btn-primary px-4" name="send_message_to_new_contact" type="submit">Send</button>
+                </div>
+            </form>
+
         </div>
     </div>
 </div>

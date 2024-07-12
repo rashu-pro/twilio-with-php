@@ -52,7 +52,6 @@ $threads = fetch_threads_by_id($conn, $_GET['contact_id']);
                             <a href="contact-list.php" class="btn btn-secondary btn-sm">Back to List</a>
                         </div>
                     </div>
-
                 </div>
 
                 <div class="chat-wrapper mt-3" style='background-color: #efeae2'>

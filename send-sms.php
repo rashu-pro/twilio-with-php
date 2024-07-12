@@ -16,8 +16,7 @@ $to_alex_whatsapp = "whatsapp:+19499293776";
 // Array of recipient WhatsApp numbers
 $recipients = [
 //    'whatsapp:+19496772261',
-//    'whatsapp:+12488055467',
-    'whatsapp:+8801643177674'
+    $to_me_whatsapp,
 ];
 $message_body = "Welcome to We Do Cabo Fun!";
 
@@ -25,7 +24,7 @@ $client = new \Twilio\Rest\Client($sid, $token);
 
 $response = [];
 foreach ($recipients as $to_whatsapp) {
-//    echo send_message($client, $from_number_whatsapp, $to_whatsapp, $message_body);
+    echo send_message($client, $from_number_whatsapp, $to_whatsapp, $message_body);
 }
 
 // Use the Client to make requests to the Twilio REST API
@@ -48,6 +47,11 @@ function send_message($client, $from, $to, $body) {
                 'body' => $body
             ]
         );
+        echo "<pre>";
+        var_dump($response);
+        echo "</pre>";
+
+        echo "<hr />";
         $message = "Message sent to $to | Response id: $response->sid\n";
     } catch (Exception $e) {
         $message = "Failed to send message to $to: " . $e->getMessage() . "\n";

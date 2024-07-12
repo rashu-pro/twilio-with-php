@@ -7,25 +7,36 @@ function insert_contact_number($conn, $contact_number) {
     // Bind variables to the prepared statement as parameters
     $stmt->bind_param("s", $contact_number);
 
+    $status = false;
+    $status_message = null;
+    $data = null;
+
     try {
         if ($stmt->execute()) {
             // Get the ID of the inserted row
             $inserted_id = $conn->insert_id;
-            return $inserted_id;
+            $status = true;
+            $status_message = 'Contact row inserted';
+            $data = $inserted_id;
         } else {
+            $status_message = $stmt->error;
             throw new Exception($stmt->error);
         }
     } catch (Exception $e) {
         if ($conn->errno == 1062) {
-            echo "Error: Duplicate entry for contact_number";
+            $status_message = 'Contact already exists';
         } else {
-            echo "Error: " . $e->getMessage();
+            $status_message = 'Error: '.$e->getMessage();
         }
-        return false;
     }
 
     // Close the statement
     $stmt->close();
+    return [
+        'status' => $status,
+        'status_message' => $status_message,
+        'data' => $data
+    ];
 }
 
 // Insert contact messages
