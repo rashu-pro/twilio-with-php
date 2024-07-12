@@ -84,6 +84,56 @@ function fetch_contacts($conn) {
     return $contacts;
 }
 
+// Function to fetch contacts with last message
+function fetch_contact_list_with_last_message($conn) {
+    $sql = "
+        SELECT
+            c.id AS contact_id,
+            c.contact_number,
+            t.id AS message_id,
+            t.message_body,
+            t.inbound,
+            t.outbound,
+            t.created_at AS message_created_at
+        FROM
+            contact_list c
+        LEFT JOIN
+            (
+                SELECT
+                    contact_id,
+                    id,
+                    message_body,
+                    inbound,
+                    outbound,
+                    created_at
+                FROM
+                    threads
+                WHERE
+                    (contact_id, created_at) IN (
+                        SELECT
+                            contact_id,
+                            MAX(created_at) AS created_at
+                        FROM
+                            threads
+                        GROUP BY
+                            contact_id
+                    )
+            ) t ON c.id = t.contact_id
+        ORDER BY
+            t.created_at DESC
+    ";
+
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        // Fetch all rows as an associative array
+        $contactMessages = $result->fetch_all(MYSQLI_ASSOC);
+        return $contactMessages;
+    } else {
+        return [];
+    }
+}
+
 // Function to fetch contacts from the database
 function fetch_contacts_by_id($conn, $id) {
     // Prepare an SQL statement for execution

@@ -22,7 +22,7 @@ $threads = fetch_threads_by_id($conn, $_GET['contact_id']);
     <title>Contact Details</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-    <link href="assets/css/style.css" rel="stylesheet">
+    <link href="assets/css/style.css?ver=2.0.0" rel="stylesheet">
 
 </head>
 <body>

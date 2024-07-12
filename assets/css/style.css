@@ -27,3 +27,31 @@
     background-color: #f0f2f5;
     padding: 20px 30px;
 }
+.message-direction-alert{
+    padding-left: 8px;
+    position: relative;
+    font-size: 14px;
+
+}
+.message-direction-alert:before{
+    content: '';
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    position: absolute;
+    top: 9px;
+    left: 0;
+}
+.message-direction-alert.inbound{
+    color: #1aa179;
+}
+.message-direction-alert.inbound:before{
+    background-color: #1aa179;
+}
+
+.message-direction-alert.outbound{
+    color: #cc9a06;
+}
+.message-direction-alert.outbound:before{
+    background-color: #cc9a06;
+}

@@ -1,8 +1,8 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'].'/vendor/autoload.php';
-require_once 'resources/database_connection.php';
-require_once 'inc/functions.php';
-$contacts = fetch_contacts($conn);
+require_once $_SERVER['DOCUMENT_ROOT'].'/resources/database_connection.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/inc/functions.php';
+$contacts = fetch_contact_list_with_last_message($conn);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,6 +14,8 @@ $contacts = fetch_contacts($conn);
     <title>Contact List</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+
+    <link href="assets/css/style.css?ver=2.0.0" rel="stylesheet">
 </head>
 <body>
 <div class="my-5">
@@ -25,7 +27,8 @@ $contacts = fetch_contacts($conn);
                     <tr>
                         <td>#</td>
                         <td>Contact Number</td>
-                        <td>Contact Mode</td>
+                        <td>Mode</td>
+                        <td>Last Message</td>
                         <td>Action</td>
                     </tr>
                     </thead>
@@ -40,15 +43,28 @@ $contacts = fetch_contacts($conn);
                             $contact_mode = 'whatsapp';
                             $contact['contact_number'] = str_replace('whatsapp:', '', $contact['contact_number']);
                         }
+
+                        $message_direction_class = 'inbound';
+                        $message_direction_text = 'incoming';
+                        if($contact['outbound']){
+                            $message_direction_class = 'outbound';
+                            $message_direction_text = 'outgoing';
+                        }
                         ?>
                         <tr>
                             <td><?php echo $counter ?></td>
                             <td><?php echo $contact['contact_number'] ?></td>
                             <td><?php echo $contact_mode ?></td>
-                            <td><a href="contact-details.php?contact_id=<?php echo $contact['id'] ?>" class="btn btn-secondary btn-sm">View Details</a> </td>
+                            <td>
+                                <?php if($contact['message_body']): ?>
+                                    <p class="m-0"><span class="message-direction-alert <?php echo $message_direction_class ?>"> <?php echo $message_direction_text ?></span></p>
+                                    <p class="m-0"> <?php echo $contact['message_body'] ?> </p>
+                                <?php endif; ?>
+                            </td>
+                            <td><a href="contact-details.php?contact_id=<?php echo $contact['contact_id'] ?>" class="btn btn-secondary btn-sm">View Details</a> </td>
                         </tr>
+                        <?php $counter++; ?>
                     <?php endforeach; ?>
-                    <?php $counter++; ?>
                     </tbody>
 
                 </table>
